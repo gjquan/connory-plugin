@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Connory Plugin",
+  "version": "0.1.0",
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.instagram.com/explore/tags/connryeverafter*"],
+      "js": ["feed.js"]
+    }
+  ]
+}
