@@ -5,7 +5,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.instagram.com/explore/tags/connryeverafter*"],
+      "matches": ["*://*.instagram.com/explore/tags/connoryeverafter*"],
       "js": ["feed.js"]
     }
   ]
