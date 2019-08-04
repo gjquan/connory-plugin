@@ -1,7 +1,7 @@
 'use strict';
 
 const FEED_URL = 'https://www.instagram.com/explore/tags/connoryeverafter/';
-const POST_DISPLAY_TIME = 5000;
+const STATIC_POST_DISPLAY_TIME = 5000;
 
 function addLoadCallback(callback) {
   if (document.readyState === 'complete') {
@@ -18,7 +18,7 @@ function startFeed() {
 	post.click();
 	_playCurrentPostVideo();
 
-	let interval = setInterval(_advanceFeed, POST_DISPLAY_TIME);
+	let interval = setInterval(_advanceFeed, STATIC_POST_DISPLAY_TIME);
 }
 
 function _advanceFeed() {
@@ -54,13 +54,18 @@ function _playCurrentPostVideo() {
 
 	let currentPost = _currentPost();
 	if (_postHasStoppedVideo(currentPost)) {
-		currentPost.querySelector(VIDEO_PLAY_SELECTOR).click();
+		let playButton = currentPost.querySelector(VIDEO_PLAY_SELECTOR);
+		if (playButton) {
+			playButton.click();
+		}
 	}
 }
 
 function _currentPost() {
-	const POPUP_POST_SELECTOR = '.M9sTE .OAXCp';
-	const CAROUSEL_CONTAINER_SELECTOR = '.MreMs';
+	const POPUP_SELECTOR = '.M9sTE';
+	const POPUP_POST_SELECTOR = POPUP_SELECTOR + ' .OAXCp';
+	const POPUP_POST_WIDTH_PX = 600;
+	const CAROUSEL_CONTAINER_SELECTOR = POPUP_SELECTOR + ' .MreMs';
 
 	let posts = document.querySelectorAll(POPUP_POST_SELECTOR);
 	if (!posts) {
@@ -70,12 +75,27 @@ function _currentPost() {
 	if (posts.length === 1) {
 		return posts[0];
 	}
+
+	let carouselContainer = document.querySelector(CAROUSEL_CONTAINER_SELECTOR);
+	if (carouselContainer) {
+		let carouselContainerStyle = carouselContainer.style ? carouselContainer.style.transform : '';
+		let match = /translateX\(([-0-9]+)px/.exec(carouselContainerStyle);
+		if (match) {
+			let translateX = parseInt(match[1], 10);
+			if (translateX < 0) { translateX *= -1; }
+
+			let currentPostIndex = translateX / POPUP_POST_WIDTH_PX;
+			if (posts.length > currentPostIndex) {
+				return posts[currentPostIndex];
+			}
+		}
+	}
 }
 
 function _postHasStoppedVideo(post) {
 	const VIDEO_PLAY_GLYPH_VISIBLE_SELECTOR = '.videoSpritePlayButton.PTIMp';
 
-	return post.querySelector(VIDEO_PLAY_GLYPH_VISIBLE_SELECTOR);
+	return post ? post.querySelector(VIDEO_PLAY_GLYPH_VISIBLE_SELECTOR) : false;
 }
 
 addLoadCallback(startFeed);
