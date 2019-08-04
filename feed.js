@@ -16,9 +16,9 @@ function startFeed() {
 
 	let post = document.querySelector(PAGE_POST_SELECTOR);
 	post.click();
-	_playCurrentPostVideo();
-
-	let interval = setInterval(_advanceFeed, STATIC_POST_DISPLAY_TIME);
+	_playCurrentPost().then(function() {
+		_advanceFeed();
+	});
 }
 
 function _advanceFeed() {
@@ -32,33 +32,44 @@ function _advanceFeed() {
 	nextImage = document.querySelector(POST_NEXT_SELECTOR);
 	if (nextImage) {
 		nextImage.click();
-		_playCurrentPostVideo();
-		return;
-	}
-
-	nextPost = document.querySelector(PAGINATION_NEXT_SELECTOR);
-	if (nextPost) {
-		nextPost.click();
-		_playCurrentPostVideo();
-		return;
-	}
-
-	// no next post; back to the beginning
-	// disabled during testing
-	// window.location.href = FEED_URL;
-	return;
-}
-
-function _playCurrentPostVideo() {
-	const VIDEO_PLAY_SELECTOR = 'a.QvAa1';
-
-	let currentPost = _currentPost();
-	if (_postHasStoppedVideo(currentPost)) {
-		let playButton = currentPost.querySelector(VIDEO_PLAY_SELECTOR);
-		if (playButton) {
-			playButton.click();
+		_playCurrentPost().then(function() {
+			setTimeout(_advanceFeed, 0);
+		});
+	} else {
+		nextPost = document.querySelector(PAGINATION_NEXT_SELECTOR);
+		if (nextPost) {
+			nextPost.click();
+			_playCurrentPost().then(function() {
+				setTimeout(_advanceFeed, 0);
+			});
+		} else {
+			// no next post; back to the beginning
+			// disabled during testing
+			// window.location.href = FEED_URL;
+			return;
 		}
 	}
+}
+
+function _playCurrentPost() {
+	let currentPost = _currentPost();
+	let returnPromise = new Promise(function(resolve, reject) {
+		if (false && _postHasStoppedVideo(currentPost)) {
+			let currentVideoElement = currentPost.querySelector('video');
+			if (currentVideoElement) {
+				currentVideoElement.addEventListener('ended', function() {
+					resolve(true);
+				});
+				_playPostVideo(currentPost);
+			} else {
+				setTimeout(function() { resolve(null); }, STATIC_POST_DISPLAY_TIME);
+			}
+		} else {
+			setTimeout(function() { resolve(null); }, STATIC_POST_DISPLAY_TIME);
+		}
+	});
+
+	return returnPromise;
 }
 
 function _currentPost() {
@@ -96,6 +107,17 @@ function _postHasStoppedVideo(post) {
 	const VIDEO_PLAY_GLYPH_VISIBLE_SELECTOR = '.videoSpritePlayButton.PTIMp';
 
 	return post ? post.querySelector(VIDEO_PLAY_GLYPH_VISIBLE_SELECTOR) : false;
+}
+
+function _playPostVideo(post) {
+	const VIDEO_PLAY_SELECTOR = 'a.QvAa1';
+
+	if (_postHasStoppedVideo(post)) {
+		let playButton = post.querySelector(VIDEO_PLAY_SELECTOR);
+		if (playButton) {
+			playButton.click();
+		}
+	}
 }
 
 addLoadCallback(startFeed);
