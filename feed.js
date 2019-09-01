@@ -54,11 +54,17 @@ function _advanceFeed() {
 function _playCurrentPost() {
 	let currentPost = _currentPost();
 	let returnPromise = new Promise(function(resolve, reject) {
-		if (false && _postHasStoppedVideo(currentPost)) {
+		if (_postHasStoppedVideo(currentPost)) {
 			let currentVideoElement = currentPost.querySelector('video');
 			if (currentVideoElement) {
-				currentVideoElement.addEventListener('ended', function() {
-					resolve(true);
+				let playedOnce = false; // keep track of whether the video has looped at least once
+				currentVideoElement.muted = true; // can only autplay muted video
+				currentVideoElement.addEventListener('timeupdate', function() {
+					if (currentVideoElement.currentTime > currentVideoElement.duration / 2) {
+						playedOnce = true;
+					} else if (playedOnce) {
+						resolve(true);
+					}
 				});
 				_playPostVideo(currentPost);
 			} else {
@@ -75,7 +81,6 @@ function _playCurrentPost() {
 function _currentPost() {
 	const POPUP_SELECTOR = '.M9sTE';
 	const POPUP_POST_SELECTOR = POPUP_SELECTOR + ' .OAXCp';
-	const POPUP_POST_WIDTH_PX = 600;
 	const CAROUSEL_CONTAINER_SELECTOR = POPUP_SELECTOR + ' .MreMs';
 
 	let posts = document.querySelectorAll(POPUP_POST_SELECTOR);
@@ -90,12 +95,13 @@ function _currentPost() {
 	let carouselContainer = document.querySelector(CAROUSEL_CONTAINER_SELECTOR);
 	if (carouselContainer) {
 		let carouselContainerStyle = carouselContainer.style ? carouselContainer.style.transform : '';
+		let carouselContainerWidth = carouselContainer.getBoundingClientRect().width;
 		let match = /translateX\(([-0-9]+)px/.exec(carouselContainerStyle);
 		if (match) {
 			let translateX = parseInt(match[1], 10);
 			if (translateX < 0) { translateX *= -1; }
 
-			let currentPostIndex = translateX / POPUP_POST_WIDTH_PX;
+			let currentPostIndex = translateX / carouselContainerWidth;
 			if (posts.length > currentPostIndex) {
 				return posts[currentPostIndex];
 			}
