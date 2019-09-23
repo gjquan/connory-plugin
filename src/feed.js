@@ -14,7 +14,7 @@ function addLoadCallback(callback) {
 
 function start() {
 	_appendHashtagBanner();
-	//_startFeed();
+	_startFeed();
 }
 
 function _appendHashtagBanner() {
@@ -22,16 +22,22 @@ function _appendHashtagBanner() {
 		var banner = document.createElement('div');
 		var header = document.createElement('h1');
 
-		header.textContent = "Be a part of our story using #connoryeverafter";
+		header.textContent = "Be a part of our story using #ConnoryEverAfter";
+		header.style.height = '8vh';
+		header.style.textAlign = 'center';
+		header.style.padding = '4vh 0 10px';
+
 		banner.id = BANNER_ID;
 		banner.style.fontFamily = 'Amatic';
 		banner.style.fontWeight = 700;
-		banner.style.fontSize = '3em';
+		banner.style.fontSize = '10vh';
 		banner.style.color = '#68826b'; /* green */
 		banner.style.position = 'fixed';
 		banner.style.bottom = 0;
 		banner.style.display = 'block';
-		banner.style.textAlign = 'center';
+		banner.style.width = '100%';
+		banner.style.background = 'rgba(255,255,255,0.9)';
+		banner.style.zIndex = '9999999';
 
 		banner.appendChild(header);
 		document.body.appendChild(banner);
@@ -71,8 +77,7 @@ function _advanceFeed() {
 			});
 		} else {
 			// no next post; back to the beginning
-			// disabled during testing
-			// window.location.href = FEED_URL;
+			window.location.href = FEED_URL;
 			return;
 		}
 	}
