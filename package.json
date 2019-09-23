@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start:firefox": "web-ext run --source-dir ./src/",
-    "sign": "web-ext sign --source-dir ./src/"
+    "sign": "web-ext sign --source-dir ./src/",
+    "build": "web-ext build --source-dir ./src/"
   },
   "repository": {
     "type": "git",

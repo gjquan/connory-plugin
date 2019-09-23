@@ -1,7 +1,8 @@
 'use strict';
 
+const BANNER_ID = 'connory-banner';
 const FEED_URL = 'https://www.instagram.com/explore/tags/connoryeverafter/';
-const STATIC_POST_DISPLAY_TIME = 5000;
+const STATIC_POST_DISPLAY_TIME = 7500;
 
 function addLoadCallback(callback) {
   if (document.readyState === 'complete') {
@@ -13,11 +14,28 @@ function addLoadCallback(callback) {
 
 function start() {
 	_appendHashtagBanner();
-	_startFeed();
+	//_startFeed();
 }
 
 function _appendHashtagBanner() {
-	// TODO
+	if(!document.getElementById(BANNER_ID)) {
+		var banner = document.createElement('div');
+		var header = document.createElement('h1');
+
+		header.textContent = "Be a part of our story using #connoryeverafter";
+		banner.id = BANNER_ID;
+		banner.style.fontFamily = 'Amatic';
+		banner.style.fontWeight = 700;
+		banner.style.fontSize = '3em';
+		banner.style.color = '#68826b'; /* green */
+		banner.style.position = 'fixed';
+		banner.style.bottom = 0;
+		banner.style.display = 'block';
+		banner.style.textAlign = 'center';
+
+		banner.appendChild(header);
+		document.body.appendChild(banner);
+	}
 }
 
 function _startFeed() {
