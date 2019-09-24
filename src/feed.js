@@ -1,5 +1,7 @@
 'use strict';
 
+window.__connoryFeedEnabled__ = true;
+
 const BANNER_ID = 'connory-banner';
 const FEED_URL = 'https://www.instagram.com/explore/tags/connoryeverafter/';
 const STATIC_POST_DISPLAY_TIME = 7500;
@@ -45,6 +47,8 @@ function _appendHashtagBanner() {
 }
 
 function _startFeed() {
+	if (!__connoryFeedEnabled__) { return; }
+
 	const PAGE_POST_SELECTOR = '.v1Nh3.kIKUG._bz0w a';
 
 	let post = document.querySelector(PAGE_POST_SELECTOR);
@@ -55,6 +59,8 @@ function _startFeed() {
 }
 
 function _advanceFeed() {
+	if (!__connoryFeedEnabled__) { return; }
+
 	const POST_NEXT_SELECTOR = 'button._6CZji';
 	const PAGINATION_NEXT_SELECTOR = '.coreSpriteRightPaginationArrow';
 

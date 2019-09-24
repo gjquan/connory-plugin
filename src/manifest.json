@@ -2,7 +2,14 @@
   "manifest_version": 2,
   "name": "Connory Plugin",
   "version": "0.1.0",
-
+  "icons": {
+    "48": "connory.png",
+    "96": "connory-96.png"
+  },
+  "browser_action": {
+      "default_icon": "wedding-32.png",
+      "default_title": "Connory Feed"
+   },
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/explore/tags/connoryeverafter*"],
