@@ -1,7 +1,5 @@
 'use strict';
 
-window.__connoryFeedEnabled__ = true;
-
 const BANNER_ID = 'connory-banner';
 const FEED_URL = 'https://www.instagram.com/explore/tags/connoryeverafter/';
 const STATIC_POST_DISPLAY_TIME = 7500;
@@ -24,31 +22,16 @@ function _appendHashtagBanner() {
 		var banner = document.createElement('div');
 		var header = document.createElement('h1');
 
-		header.textContent = "Be a part of our story using #ConnoryEverAfter";
-		header.style.height = '8vh';
-		header.style.textAlign = 'center';
-		header.style.padding = '4vh 0 10px';
+		header.textContent = "Be a part of our story: #ConnoryEverAfter";
 
 		banner.id = BANNER_ID;
-		banner.style.fontFamily = 'Amatic';
-		banner.style.fontWeight = 700;
-		banner.style.fontSize = '10vh';
-		banner.style.color = '#68826b'; /* green */
-		banner.style.position = 'fixed';
-		banner.style.bottom = 0;
-		banner.style.display = 'block';
-		banner.style.width = '100%';
-		banner.style.background = 'rgba(255,255,255,0.9)';
-		banner.style.zIndex = '9999999';
-
+		banner.classList.add('connory-feed-banner');
 		banner.appendChild(header);
 		document.body.appendChild(banner);
 	}
 }
 
 function _startFeed() {
-	if (!__connoryFeedEnabled__) { return; }
-
 	const PAGE_POST_SELECTOR = '.v1Nh3.kIKUG._bz0w a';
 
 	let post = document.querySelector(PAGE_POST_SELECTOR);
@@ -59,8 +42,6 @@ function _startFeed() {
 }
 
 function _advanceFeed() {
-	if (!__connoryFeedEnabled__) { return; }
-
 	const POST_NEXT_SELECTOR = 'button._6CZji';
 	const PAGINATION_NEXT_SELECTOR = '.coreSpriteRightPaginationArrow';
 

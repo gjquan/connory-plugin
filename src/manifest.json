@@ -7,13 +7,14 @@
     "96": "connory-96.png"
   },
   "browser_action": {
-      "default_icon": "wedding-32.png",
-      "default_title": "Connory Feed"
+    "default_icon": "wedding-32.png",
+    "default_title": "Connory Feed"
    },
   "content_scripts": [
     {
       "matches": ["*://*.instagram.com/explore/tags/connoryeverafter*"],
-      "js": ["feed.js"]
+      "js": ["feed.js"],
+      "css": ["feed.css"]
     }
   ]
 }
